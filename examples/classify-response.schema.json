@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/CustomerClassificationResponse",
+  "$defs": {
+    "CustomerClassificationResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requestId", "model", "result", "billing"],
+      "properties": {
+        "requestId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "model": { "$ref": "#/$defs/CustomerModelFamily" },
+        "result": { "$ref": "#/$defs/CustomerClassificationResult" },
+        "billing": { "$ref": "#/$defs/CustomerApiBilling" }
+      }
+    },
+    "CustomerModelFamily": {
+      "type": "string",
+      "enum": ["thor", "theos", "athena", "odin", "freya", "hermes", "ares", "apollo"]
+    },
+    "CustomerClassificationResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Email classification and optional content-signal audit. This does not guarantee mailbox placement or deliverability.",
+      "required": ["label", "spamProbability", "confidence", "reasons", "flaggedTerms", "analyzedFields", "modelVersion", "analyzedAt"],
+      "properties": {
+        "label": { "type": "string", "enum": ["inbox", "spam"] },
+        "spamProbability": { "type": "number" },
+        "flaggedTermCount": { "type": "number", "multipleOf": 1, "minimum": 0 },
+        "confidence": { "type": "string", "enum": ["low", "medium", "high"] },
+        "reasons": { "type": "array", "items": { "$ref": "#/$defs/ClassificationReason" } },
+        "flaggedTerms": { "type": "array", "items": { "type": "string" } },
+        "analyzedFields": { "type": "array", "items": { "type": "string" } },
+        "modelVersion": { "type": "string" },
+        "analyzedAt": { "type": "string" },
+        "contentAudit": { "$ref": "#/$defs/ContentAuditResult" }
+      }
+    },
+    "ClassificationReason": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "signal": { "type": "string" },
+        "detail": { "type": "string" },
+        "weight": { "type": "number" }
+      },
+      "required": ["signal", "detail", "weight"]
+    },
+    "ContentAuditResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "score": { "type": "number", "multipleOf": 1, "minimum": 0, "maximum": 100 },
+        "grade": { "type": "string", "enum": ["A", "B", "C", "D", "F"] },
+        "summary": { "type": "string", "enum": ["fix_critical", "fix_warnings", "review_suggestions", "looks_good"] },
+        "counts": { "$ref": "#/$defs/ContentAuditCounts" },
+        "totalIssues": { "type": "number", "multipleOf": 1, "minimum": 0 },
+        "criticalCount": { "type": "number", "multipleOf": 1, "minimum": 0 },
+        "warningCount": { "type": "number", "multipleOf": 1, "minimum": 0 },
+        "suggestionCount": { "type": "number", "multipleOf": 1, "minimum": 0 },
+        "issues": { "type": "array", "maxItems": 50, "items": { "$ref": "#/$defs/ContentAuditIssue" } },
+        "goodPractices": { "type": "array", "maxItems": 20, "items": { "$ref": "#/$defs/ContentAuditGoodPractice" } },
+        "homoglyphTerms": { "type": "array", "maxItems": 20, "items": { "type": "string", "maxLength": 120 } },
+        "inputTruncated": { "type": "boolean" }
+      },
+      "required": ["score", "grade", "summary", "counts", "totalIssues", "criticalCount", "warningCount", "suggestionCount", "issues", "goodPractices", "inputTruncated"]
+    },
+    "ContentAuditCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "words": { "type": "number", "multipleOf": 1, "minimum": 0 },
+        "links": { "type": "number", "multipleOf": 1, "minimum": 0 },
+        "images": { "type": "number", "multipleOf": 1, "minimum": 0 },
+        "triggerPhrases": { "type": "number", "multipleOf": 1, "minimum": 0 }
+      },
+      "required": ["words", "links", "images", "triggerPhrases"]
+    },
+    "ContentAuditIssue": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": { "type": "string" },
+        "category": { "type": "string", "enum": ["subject", "content", "links", "structure", "compliance"] },
+        "severity": { "type": "string", "enum": ["critical", "warning", "suggestion"] },
+        "deduction": { "type": "number", "multipleOf": 1, "minimum": 0, "maximum": 100 },
+        "evidence": { "type": "string", "maxLength": 200 }
+      },
+      "required": ["code", "category", "severity", "deduction", "evidence"]
+    },
+    "ContentAuditGoodPractice": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": { "type": "string" },
+        "category": { "type": "string", "enum": ["subject", "content", "links", "structure", "compliance"] }
+      },
+      "required": ["code", "category"]
+    },
+    "CustomerApiBilling": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["chargedMillicents", "replayed"],
+      "properties": {
+        "chargedMillicents": { "type": "number", "multipleOf": 1, "minimum": 0 },
+        "replayed": {
+          "type": "boolean",
+          "description": "True when the account-scoped 24-hour receipt cache returned the result without another computation or debit."
+        }
+      }
+    }
+  }
+}

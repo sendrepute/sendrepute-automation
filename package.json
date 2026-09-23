@@ -1,0 +1,12 @@
+{
+  "name": "sendrepute-automation-recipes",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Advisory Zapier and Make recipes for paid SendRepute draft analysis",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "pack": "node scripts/package.mjs"
+  }
+}

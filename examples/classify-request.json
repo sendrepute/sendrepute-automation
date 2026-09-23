@@ -1,0 +1,5 @@
+{
+  "sender": "Example Store",
+  "subject": "Your order update",
+  "body": "Your order has shipped."
+}
