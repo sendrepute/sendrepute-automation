@@ -1,5 +1,3 @@
-> **Standalone source distribution:** this repository contains the integration runtime, documentation, and source packager. Upstream workspace/CMS/production-normalizer regression suites are deliberately not distributed here because they depend on private server code or isolated platform fixtures. Testing commands and historical verification evidence below describe upstream maintainer validation, not a self-contained test suite in this source-only checkout. No third-party registry publication is implied.
-
 # SendRepute paid draft-analysis recipes
 
 Version 0.2.0 contains honest, standalone advisory analysis recipes for Zapier
@@ -60,3 +58,22 @@ transport controls, and verifies deterministic archive contents.
 `dist/sendrepute-automation-recipes-0.2.0.zip` from an explicit sorted allowlist
 with fixed timestamps. Tests, fixtures, credentials, caches, dependencies, and
 unrelated integrations are excluded.
+## Paid-intent ledger (anti-duplicate)
+
+Every paid or billing console call is recorded in a durable intent ledger **before** the request is sent. The identity is the credential fingerprint, operation, method, path and canonical body. An identical request is refused (409 `INTENT_LOCKED` / `INTENT_COMPLETED`) from any session, worker or restart while the intent is pending, ambiguous (timeout, transport error, 5xx, 408/425, malformed response) or completed. Definitive 4xx refusals unlock it. The upstream replay identity (`recoveryId`, or `analysisId`) is generated once, persisted with the intent and reused on resend, so the server can deduplicate. Operators review intents with the **Paid intents** button and release one only with a reason and an explicit confirmation. Releasing a completed intent issues a fresh replay id for a deliberate second charge. Pending intents are never released online or by timeout; after a worker crash, stop every worker and run offline recovery, which turns them into ambiguous intents for reconciliation. With no ledger configured, paid and billing operations return 503 `INTENT_STORE_REQUIRED`. The filesystem store supports a **single host only**, and it refuses to start unless you acknowledge that and its directory is absolute, `0700` and owned by the server user. Prices are always sent upstream for server-side enforcement, and a charge above consent is flagged. Classification (`classifyCustomerEmail`, POST /v1/classify) sends `priceAuthorization` with the four effective rates returned by this session's latest GET /v1/pricing plus the operator's ceiling. A confirmation that no longer matches the latest rates is refused (409 `PRICE_CONFIRMATION_STALE`) before anything is sent. The server re-checks rates and ceiling atomically at settlement (409 `PRICE_CHANGED`). Manual edit reclassification (`customerClassifyEmail`, POST /v1/classify/edit) has no price field in its request schema (`CustomerManualEditInput`, additionalProperties false); the server prices it authoritatively.
+
+```js
+import { FileIntentStore, startCustomerApiConsole } from "./src/customer-api/index.mjs";
+await startCustomerApiConsole({ intentStore: new FileIntentStore({ directory: "/var/lib/sendrepute/intents", singleHost: true }) });
+// or env: SENDREPUTE_CONSOLE_INTENT_DIR=/var/lib/sendrepute/intents SENDREPUTE_CONSOLE_INTENT_SINGLE_HOST=1
+```
+
+The Node lock is an exclusive-create lock file with **no time-based takeover**. A stalled owner keeps the lock, and other workers fail closed with 503 `INTENT_STORE_BUSY` without sending. A lock abandoned by a crashed worker stays in place until offline recovery, which you run only with every console worker stopped:
+
+```sh
+node -e 'import("./src/customer-api/index.mjs").then(m => console.log(m.recoverAbandonedIntentLocks({ directory: process.argv[1], allWorkersStopped: true })))' /var/lib/sendrepute/intents
+```
+
+### Browser fixture (no network, disposable credentials)
+
+`node examples/console-fixture.mjs` serves the console on http://127.0.0.1:8787/sendrepute-admin with an in-process fake transport and a random fake API key. It prints a random operator token (or uses `FIXTURE_OPERATOR_TOKEN` if 24+ characters) and keeps a throwaway intent ledger. `globalThis.fetch` is disabled. Multi-host deployments must pass their own `IntentLedger` subclass backed by shared storage with atomic locks.

@@ -7,6 +7,10 @@
   "type": "module",
   "scripts": {
     "test": "node --test tests/*.test.mjs",
-    "pack": "node scripts/package.mjs"
+    "pack": "node scripts/package.mjs",
+    "console": "node examples/customer-console.mjs"
+  },
+  "exports": {
+    "./customer-api": "./src/customer-api/index.mjs"
   }
 }

@@ -15,7 +15,17 @@ export const files = [
   "make/README.md",
   "zapier/README.md",
   "zapier/preflight.js",
-  "zapier/validate-response.js"
+  "zapier/validate-response.js",
+  "src/customer-api/index.mjs",
+  "src/customer-api/catalog.mjs",
+  "src/customer-api/policy.mjs",
+  "src/customer-api/client.mjs",
+  "src/customer-api/admin.mjs",
+  "src/customer-api/serve.mjs",
+  "src/customer-api/intent-store.mjs",
+  "src/customer-api/customer-api-operations.json",
+  "src/customer-api/admin-ui.html",
+  "examples/customer-console.mjs"
 ];
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
