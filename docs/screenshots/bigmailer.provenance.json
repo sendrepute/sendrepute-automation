@@ -1,0 +1,20 @@
+{
+  "integration": "bigmailer",
+  "files": [
+    "artifacts/spam-signal/public/integration-previews/bigmailer.webp",
+    "integrations/bigmailer/docs/screenshots/dashboard.webp"
+  ],
+  "sha256": "103b1ba3e7d5e6c2fc868f18bd4a39f9981ba9315723b3fe336aa04f4aa0c38e",
+  "capture": {
+    "method": "Real Chromium screenshot via playwright-core 1.62.1",
+    "viewport": "1440x1000 (CSS px)",
+    "date": "2026-10-09",
+    "state": "Initial signed-in overview after page load; no operation selected or executed"
+  },
+  "host": "Node standalone console: integrations/bigmailer/examples/console-fixture.mjs copied to /tmp; only changes: absolute src import and product label \"SendRepute for BigMailer - local fixture, synthetic account\"",
+  "url_path": "/sendrepute-admin",
+  "bound": "127.0.0.1 only, temporary /tmp server, stopped after capture",
+  "demo_data_boundary": "Synthetic local account only (fixture account acct_fixture / operator@fixture.invalid). Upstream SendRepute API replaced by an in-process fixture transport; no network, live API, or paid calls. Random disposable fixture API key held server-side and never rendered; operator token (Node hosts) entered into a masked field and not visible. Throwaway 0700 intent ledger in /tmp. No project or production database used.",
+  "operation_count_note": "All 49 operations enabled (fixture configures handoffReturnOrigin https://fixture.invalid).",
+  "caption": "SendRepute customer console from the bigmailer integration, running locally with a synthetic sample account and fixture transport. Not a live account."
+}

@@ -1,5 +1,35 @@
 # SendRepute paid draft-analysis recipes
 
+## Control panel preview
+
+![SendRepute Make and Zapier integration console](https://raw.githubusercontent.com/sendrepute/sendrepute-automation/main/docs/screenshots/dashboard.webp)
+
+The standalone integration console with sample data, not the Make or Zapier dashboard.
+
+### Other integration consoles
+
+The following captures are hosted here for integrations distributed through the website without separate repositories.
+
+#### BigMailer
+
+![SendRepute BigMailer console](https://raw.githubusercontent.com/sendrepute/sendrepute-automation/main/docs/screenshots/bigmailer.webp)
+
+#### Brevo
+
+![SendRepute Brevo console](https://raw.githubusercontent.com/sendrepute/sendrepute-automation/main/docs/screenshots/brevo.webp)
+
+#### Listmonk
+
+![SendRepute Listmonk console](https://raw.githubusercontent.com/sendrepute/sendrepute-automation/main/docs/screenshots/listmonk.webp)
+
+These are standalone integration consoles with sample data, not the providers' dashboards.
+
+#### Mailcoach
+
+![SendRepute Mailcoach integration console](https://raw.githubusercontent.com/sendrepute/sendrepute-automation/main/docs/screenshots/mailcoach.webp)
+
+The shipped Mailcoach integration mounted in a local Laravel host with sample data, not a complete Mailcoach installation.
+
 Version 0.2.0 contains honest, standalone advisory analysis recipes for Zapier
 and Make. Each submits three owner-selected strings to the paid API and displays
 the result. Neither recipe is a send adapter, deliverability approval, whole

@@ -1,0 +1,20 @@
+{
+  "integration": "mailcoach",
+  "files": [
+    "artifacts/spam-signal/public/integration-previews/mailcoach.webp",
+    "integrations/mailcoach/docs/screenshots/dashboard.webp"
+  ],
+  "sha256": "5d2e0a30008dbe0a9bf1aa0d1a55170b8e3719e957526706df05d72df6135f1b",
+  "capture": {
+    "method": "Real Chromium screenshot via playwright-core 1.62.1",
+    "viewport": "1440x1000 (CSS px)",
+    "date": "2026-10-09",
+    "state": "Initial signed-in overview after page load; no operation selected or executed"
+  },
+  "host": "Native Laravel v12.69.2 application (same /tmp host) registering shipped SendRepute\\Mailcoach\\SendReputeMailcoachServiceProvider, routes at /sendrepute/customer-api. spatie/mailcoach itself is NOT installed in integrations/mailcoach/vendor, so this is the Mailcoach integration package inside a plain Laravel host, not a Mailcoach app UI. Product label \"Mailcoach\" is set by the shipped provider.",
+  "url_path": "/sendrepute/customer-api",
+  "bound": "127.0.0.1 only, temporary /tmp server, stopped after capture",
+  "demo_data_boundary": "Synthetic local account only (fixture account acct_fixture / operator@fixture.invalid). Upstream SendRepute API replaced by an in-process fixture transport; no network, live API, or paid calls. Random disposable fixture API key held server-side and never rendered; operator token (Node hosts) entered into a masked field and not visible. Throwaway 0700 intent ledger in /tmp. No project or production database used.",
+  "operation_count_note": "Framework hosts show 48 of 49 operations because no handoff_return_origin was configured, so the hosted builder handoff is disabled by the shipped code.",
+  "caption": "SendRepute customer console from the mailcoach integration, running locally with a synthetic sample account and fixture transport. Not a live account."
+}
